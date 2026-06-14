@@ -8,7 +8,7 @@ public class FarmingConstants {
     // Growth stage timing (in seconds)
     public static float STAGE_1_DURATION = 3f;  // Seed to sprout
     public static float STAGE_2_DURATION = 5f;  // Sprout to young plant
-    public static float STAGE_3_DURATION = 7f;  // Young plant to mature
+    public static float STAGE_3_DURATION = 10f;  // Young plant to mature
 
     // Water system timing (in seconds)
     public static float WATERING_DURATION = 10f;  // How long water effect lasts

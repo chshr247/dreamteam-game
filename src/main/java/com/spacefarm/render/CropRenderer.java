@@ -48,7 +48,7 @@ public class CropRenderer {
 
         textures[GrowthStage.SEED.ordinal()]   = seed;
         textures[GrowthStage.SPROUT.ordinal()] = sprout;
-        textures[GrowthStage.YOUNG.ordinal()]  = mature;
+        textures[GrowthStage.YOUNG.ordinal()]  = sprout;
         textures[GrowthStage.MATURE.ordinal()] = mature;
         return textures;
     }

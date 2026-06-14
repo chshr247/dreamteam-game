@@ -61,6 +61,7 @@ public class GameSession {
     private GameInteractionService interactionService;
     private TilePicker tilePicker;
     private TreeBoxUI treeBoxUI;
+    private TutorialManager tutorialManager;
     private boolean gameOver;
     private boolean victory;
     private Texture baseTileTexture;
@@ -183,6 +184,7 @@ public class GameSession {
         interactionService = new GameInteractionService(this);
         treeBoxUI = new TreeBoxUI();
         treeBoxUI.setInventory(inventory);
+        tutorialManager = new TutorialManager(this);
         gameOver = false;
         victory = false;
 
@@ -194,6 +196,7 @@ public class GameSession {
         droneConsoleOverlay.update(deltaTime);
         interactionService.update(deltaTime);
         if (treeBoxUI != null) treeBoxUI.update(deltaTime);
+        if (tutorialManager != null) tutorialManager.update(deltaTime);
     }
 
     public boolean handleTouchDown(int screenX, int screenY, int button) {
@@ -229,7 +232,10 @@ public class GameSession {
         if (treeBoxUI != null) treeBoxUI.dispose();
         if (droneConsoleOverlay != null) droneConsoleOverlay.dispose();
         if (audioManager != null) audioManager.dispose();
+        if (tutorialManager != null) tutorialManager.dispose();
     }
+
+    public TutorialManager getTutorialManager() { return tutorialManager; }
 
     public AudioManager getAudioManager() { return audioManager; }
     public Wallet getWallet() { return wallet; }

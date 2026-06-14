@@ -1,8 +1,8 @@
 package com.spacefarm.inventory;
 
-// малий інвентар на 8 слотів
+// малий інвентар на 24 слоти (3 ряди по 8)
 public class Inventory {
-    private int inventorySize = 8;
+    private int inventorySize = 24;
     private static final int ROW_SIZE = 8;
     private Item[] slots;
     private int selectedSlot;
