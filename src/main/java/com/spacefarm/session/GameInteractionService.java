@@ -76,6 +76,7 @@ public class GameInteractionService {
                 if (canConfirm) {
                     session.getInventory().removeTreePhaseItem(result);
                     session.getTreeBoxUI().confirmPhase(result);
+                    session.getAudioManager().playBoughtSound();
                     session.getOutdoorZone().greenLocation(result);
                     session.getOutdoorZoneRenderer().applyGreenTiles(result);
                     
@@ -242,7 +243,6 @@ public class GameInteractionService {
         session.getOxygenManager().updatePositionTile(coord);
 
         if (session.getBaseZone().isDroneZone(coord)) {
-            session.getAudioManager().playDroneSound();
             session.getDroneConsoleOverlay().setVisible(true);
             return;
         }

@@ -37,10 +37,10 @@ public class OutdoorZone {
         
         // 5 positions tightly packed around the base
         int[][] positions = {
-            // Top edge
+            // Visually BOTTOM edge (lower Y) - reset to center
             {baseX + baseWidth / 2 - width / 2, borderY},
-            // Bottom edge
-            {baseX + baseWidth / 2 - width / 2, borderY + borderHeight - height},
+            // Visually TOP edge (higher Y) - moved to a safe spot (x=5, y=38)
+            {5, 38},
             // Left edge
             {borderX, baseY + baseHeight / 2 - height / 2},
             // Right edge
