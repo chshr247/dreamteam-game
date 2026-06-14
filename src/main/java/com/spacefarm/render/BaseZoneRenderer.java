@@ -29,6 +29,17 @@ public class BaseZoneRenderer {
     private SpriteBatch batch;
     private com.badlogic.gdx.maps.tiled.TiledMap referenceMap;
 
+    // Hover effect state
+    private float treeHoverAlpha = 0f;
+    private float droneHoverAlpha = 0f;
+    private static final float FADE_SPEED = 5.0f;
+    private final com.badlogic.gdx.math.Vector3 tmpVec = new com.badlogic.gdx.math.Vector3();
+    private com.badlogic.gdx.graphics.glutils.ShaderProgram whiteShader;
+
+    // Last known drawing bounds for pixel-perfect hover detection
+    private float lastTreeX, lastTreeY, lastTreeW, lastTreeH;
+    private float lastDroneX, lastDroneY, lastDroneSize;
+
     public BaseZoneRenderer(BaseZone baseZone, TiledMapTileLayer zoneLayer, int tileSize, int worldMinX, int worldMinY) {
         this.baseZone = baseZone;
         this.zoneLayer = zoneLayer;
@@ -36,11 +47,40 @@ public class BaseZoneRenderer {
         this.worldMinY = worldMinY;
         this.batch = new SpriteBatch();
 
-        // Create textures
+        // Create textures FIRST so treePhaseTextures is initialized
         createTextures(tileSize);
+        createWhiteShader();
 
         // Apply base zone tiles to the map
         applyBaseZoneTiles();
+    }
+
+    private void createWhiteShader() {
+        String vertexShader = "attribute vec4 a_position;\n" +
+                              "attribute vec4 a_color;\n" +
+                              "attribute vec2 a_texCoord0;\n" +
+                              "uniform mat4 u_projTrans;\n" +
+                              "varying vec4 v_color;\n" +
+                              "varying vec2 v_texCoords;\n" +
+                              "void main() {\n" +
+                              "   v_color = a_color;\n" +
+                              "   v_texCoords = a_texCoord0;\n" +
+                              "   gl_Position = u_projTrans * a_position;\n" +
+                              "}\n";
+        String fragmentShader = "#ifdef GL_ES\n" +
+                                "precision mediump float;\n" +
+                                "#endif\n" +
+                                "varying vec4 v_color;\n" +
+                                "varying vec2 v_texCoords;\n" +
+                                "uniform sampler2D u_texture;\n" +
+                                "void main() {\n" +
+                                "  vec4 color = texture2D(u_texture, v_texCoords);\n" +
+                                "  gl_FragColor = vec4(1.0, 1.0, 1.0, color.a * v_color.a);\n" +
+                                "}\n";
+        whiteShader = new com.badlogic.gdx.graphics.glutils.ShaderProgram(vertexShader, fragmentShader);
+        if (!whiteShader.isCompiled()) {
+            Gdx.app.error("BaseZoneRenderer", "Error compiling white shader: " + whiteShader.getLog());
+        }
     }
 
     public void setReferenceMap(com.badlogic.gdx.maps.tiled.TiledMap referenceMap) {
@@ -197,6 +237,32 @@ public class BaseZoneRenderer {
             applyBaseZoneTiles();
             baseZone.clearDirty();
         }
+
+        // --- Precise Hover Detection ---
+        tmpVec.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+        camera.unproject(tmpVec);
+        float mouseX = tmpVec.x;
+        float mouseY = tmpVec.y;
+
+        float dt = Gdx.graphics.getDeltaTime();
+        
+        // Tree hover check
+        if (mouseX >= lastTreeX && mouseX <= lastTreeX + lastTreeW &&
+            mouseY >= lastTreeY && mouseY <= lastTreeY + lastTreeH) {
+            treeHoverAlpha = Math.min(1f, treeHoverAlpha + dt * FADE_SPEED);
+        } else {
+            treeHoverAlpha = Math.max(0f, treeHoverAlpha - dt * FADE_SPEED);
+        }
+
+        // Drone hover check
+        if (mouseX >= lastDroneX && mouseX <= lastDroneX + lastDroneSize &&
+            mouseY >= lastDroneY && mouseY <= lastDroneY + lastDroneSize) {
+            droneHoverAlpha = Math.min(1f, droneHoverAlpha + dt * FADE_SPEED);
+        } else {
+            droneHoverAlpha = Math.max(0f, droneHoverAlpha - dt * FADE_SPEED);
+        }
+        // -----------------------
+
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
         renderTreeOverlay();
@@ -240,6 +306,16 @@ public class BaseZoneRenderer {
         float treeStartX = treeBaseArea.x() * tileSize + (areaWidth - treeWidth) / 2f;
         float treeStartY = treeBaseArea.y() * tileSize;
 
+        // Store for hover detection in next frame
+        lastTreeX = treeStartX;
+        lastTreeY = treeStartY;
+        lastTreeW = treeWidth;
+        lastTreeH = treeHeight;
+
+        if (treeHoverAlpha > 0) {
+            drawOutline(currentTreeTexture, treeStartX, treeStartY, treeWidth, treeHeight, treeHoverAlpha);
+        }
+
         batch.setColor(1, 1, 1, 1.0f);
         batch.draw(currentTreeTexture, treeStartX, treeStartY, treeWidth, treeHeight);
     }
@@ -250,8 +326,34 @@ public class BaseZoneRenderer {
         float droneStartX = dronePos.x() * tileSize + baseZone.getDroneOffsetX();
         float droneStartY = dronePos.y() * tileSize + baseZone.getDroneOffsetY();
         float droneSize = baseZone.getDroneZoneSize() * tileSize;
+
+        // Store for hover detection in next frame
+        lastDroneX = droneStartX;
+        lastDroneY = droneStartY;
+        lastDroneSize = droneSize;
+
+        if (droneHoverAlpha > 0) {
+            drawOutline(droneTextureOverlay, droneStartX, droneStartY, droneSize, droneSize, droneHoverAlpha * 0.85f);
+        }
+
         batch.setColor(1, 1, 1, 0.85f);
         batch.draw(droneTextureOverlay, droneStartX, droneStartY, droneSize, droneSize);
+    }
+
+    private void drawOutline(Texture tex, float x, float y, float w, float h, float alpha) {
+        batch.setShader(whiteShader);
+        batch.setColor(1, 1, 1, alpha);
+        float offset = 1.5f;
+        // 8-way offset for a thicker outline
+        batch.draw(tex, x - offset, y, w, h);
+        batch.draw(tex, x + offset, y, w, h);
+        batch.draw(tex, x, y - offset, w, h);
+        batch.draw(tex, x, y + offset, w, h);
+        batch.draw(tex, x - offset, y - offset, w, h);
+        batch.draw(tex, x + offset, y - offset, w, h);
+        batch.draw(tex, x - offset, y + offset, w, h);
+        batch.draw(tex, x + offset, y + offset, w, h);
+        batch.setShader(null);
     }
 
     public void dispose() {
@@ -271,6 +373,7 @@ public class BaseZoneRenderer {
             }
         }
         if (droneTextureOverlay != null) droneTextureOverlay.dispose();
+        if (whiteShader != null) whiteShader.dispose();
         if (batch != null) batch.dispose();
     }
 }

@@ -49,10 +49,10 @@ public class BaseZone {
             internalAddGardenBed();
         }
 
-        // Space drone anchored relative to the tree
+        // Space drone anchored relative to the tree - moved closer and 4 tiles lower
         this.droneZoneSize = 5;
-        int droneX = treeCenter.x() + treeWidth + 7;
-        int droneY = treeCenter.y();
+        int droneX = treeCenter.x() + treeWidth + 4;
+        int droneY = treeCenter.y() - 4;
         this.droneZoneCenter = new TileCoord(droneX, droneY);
     }
 

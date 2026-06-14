@@ -35,7 +35,7 @@ public class CropRenderer {
 
         cropTexturesMap.put(FarmingConstants.CropType.DEFAULT, loadTextures("sprite/plants/stage1.png", "sprite/plants/stage2.png", "sprite/plants/stage3.png"));
 
-        cropTexturesMap.put(FarmingConstants.CropType.EPIC, loadTextures("sprite/plants/epic_stage1.png", "sprite/plants/epic_stage2.png", "sprite/plants/epic_stage2.png"));
+        cropTexturesMap.put(FarmingConstants.CropType.EPIC, loadTextures("sprite/plants/epic_stage1.png", "sprite/plants/epic_stage2.png", "sprite/plants/epic_stage3.png"));
 
         cropTexturesMap.put(FarmingConstants.CropType.LEGENDARY, loadTextures("sprite/plants/leg_stage1.png", "sprite/plants/leg_stage2.png", "sprite/plants/leg_stage3.png"));
     }

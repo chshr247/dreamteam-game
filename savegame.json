@@ -18,11 +18,15 @@
         "itemType": "SICKLE"
       },
       {
-        "name": "Crystal",
-        "description": "A valuable space crystal obtained from scavenging",
-        "itemType": "CRYSTAL"
+        "name": "Bio-Compost",
+        "description": "Tree phase 1 item. Shop price: $500",
+        "itemType": "BIO_COMPOST"
       },
-      null,
+      {
+        "name": "Living Dew",
+        "description": "Tree phase 2 item. Shop price: $1000",
+        "itemType": "LIVING_DEW"
+      },
       {
         "name": "Mycorrhiza Net",
         "description": "Tree phase 3 item. Shop price: $2000",
@@ -37,12 +41,28 @@
         "name": "Eden Core",
         "description": "Tree phase 5 item. Shop price: $8000",
         "itemType": "EDEN_CORE"
-      }
+      },
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
     ],
-    "selectedSlot": 4
+    "selectedSlot": 0
   },
   "oxygen": {
-    "currentOxygen": 94.0,
+    "currentOxygen": 100.0,
     "isAtBase": true
   },
   "farming": {
@@ -50,10 +70,10 @@
   },
   "locations": [
     {
-      "isCleared": true,
-      "lastClearedTime": 1781360606172,
+      "isCleared": false,
+      "lastClearedTime": 0,
       "isScavenging": false,
-      "scavengingStartTime": 1781360596168
+      "scavengingStartTime": 0
     },
     {
       "isCleared": false,
@@ -62,22 +82,22 @@
       "scavengingStartTime": 0
     },
     {
-      "isCleared": true,
-      "lastClearedTime": 1781360599334,
+      "isCleared": false,
+      "lastClearedTime": 0,
       "isScavenging": false,
-      "scavengingStartTime": 1781360589329
+      "scavengingStartTime": 0
     },
     {
-      "isCleared": true,
-      "lastClearedTime": 1781360602111,
+      "isCleared": false,
+      "lastClearedTime": 0,
       "isScavenging": false,
-      "scavengingStartTime": 1781360592106
+      "scavengingStartTime": 0
     },
     {
-      "isCleared": true,
-      "lastClearedTime": 1781360605395,
+      "isCleared": false,
+      "lastClearedTime": 0,
       "isScavenging": false,
-      "scavengingStartTime": 1781360595390
+      "scavengingStartTime": 0
     },
     {
       "isCleared": false,
@@ -87,7 +107,7 @@
     }
   ],
   "wallet": {
-    "balance": 5600.0
+    "balance": 5500.0
   },
   "gameOver": false
 }

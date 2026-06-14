@@ -544,6 +544,7 @@ public class DroneConsoleOverlay {
         if (u.maxed()||session.getWallet().getBalance()<u.cost) return;
         session.getWallet().spend(u.cost);
         u.lv++;
+        session.getAudioManager().playBoughtSound();
         if ("base_inv".equals(u.id)) session.getInventory().expandInventory();
         if ("base_garden".equals(u.id)) {
             if (session.getBaseZone().addGardenBed()) {

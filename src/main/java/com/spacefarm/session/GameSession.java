@@ -86,7 +86,8 @@ public class GameSession {
         this.sceneRenderer = renderer;
     }
 
-    public void create(OrthographicCamera camera) {
+    public void create(OrthographicCamera camera, AudioManager audioManager) {
+        this.audioManager = audioManager;
         map = loadMapOrFallback();
         referenceMap = loadReferenceMap();
 
@@ -172,9 +173,6 @@ public class GameSession {
         wallet = new Wallet(difficulty.startingMoney);
         oxygenManager.setBaseZone(baseZone);
 
-        audioManager = new AudioManager();
-        audioManager.playMusic();
-
         inventoryUI = new InventoryUI(inventory, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         contextMenu = new ContextMenuOverlay();
         gameOverOverlay = new GameOverOverlay();
@@ -231,7 +229,6 @@ public class GameSession {
         if (seedWheelOverlay != null) seedWheelOverlay.dispose();
         if (treeBoxUI != null) treeBoxUI.dispose();
         if (droneConsoleOverlay != null) droneConsoleOverlay.dispose();
-        if (audioManager != null) audioManager.dispose();
         if (tutorialManager != null) tutorialManager.dispose();
     }
 
@@ -280,8 +277,19 @@ public class GameSession {
     }
 
     private TiledMap loadMapOrFallback() {
-        FileHandle tmx = Gdx.files.internal("map-2.tmx");
-        if (tmx.exists()) return new TmxMapLoader().load("map-2.tmx");
+        try {
+            FileHandle tmx = Gdx.files.internal("map-2.tmx");
+            if (tmx.exists()) {
+                Gdx.app.log("GameSession", "Loading map-2.tmx");
+                return new TmxMapLoader().load("map-2.tmx");
+            } else {
+                Gdx.app.error("GameSession", "map-2.tmx not found in assets!");
+            }
+        } catch (Exception e) {
+            Gdx.app.error("GameSession", "Error loading map-2.tmx: " + e.getMessage());
+            e.printStackTrace();
+        }
+        Gdx.app.log("GameSession", "Using fallback empty map");
         return new TiledMap();
     }
 
@@ -294,6 +302,10 @@ public class GameSession {
     }
 
     private void centerCameraOnMap(OrthographicCamera camera) {
+        if (camera == null || baseLayer == null || baseZone == null) {
+            Gdx.app.error("GameSession", "Cannot center camera: camera, baseLayer, or baseZone is null");
+            return;
+        }
         float tileWidth  = baseLayer.getTileWidth();
         float tileHeight = baseLayer.getTileHeight();
         float baseCenterX = (baseZone.getBaseX() + baseZone.getBaseWidth()  / 2f) * tileWidth;

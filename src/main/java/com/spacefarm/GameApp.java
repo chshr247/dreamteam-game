@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.spacefarm.audio.AudioManager;
 import com.spacefarm.input.CameraController;
 import com.spacefarm.input.GameInputRouter;
 import com.spacefarm.render.GameOverOverlay;
@@ -27,6 +28,7 @@ public class GameApp extends ApplicationAdapter {
 
     private MainMenuOverlay mainMenu;
     private SaveManager     saveManager;
+    private AudioManager    audioManager;
 
     private OrthographicCamera camera;
     private Viewport           viewport;
@@ -37,8 +39,10 @@ public class GameApp extends ApplicationAdapter {
 
     @Override
     public void create() {
-        saveManager = new SaveManager();
-        mainMenu    = new MainMenuOverlay(saveManager.hasSaveFile());
+        saveManager  = new SaveManager();
+        audioManager = new AudioManager();
+        mainMenu     = new MainMenuOverlay(saveManager.hasSaveFile());
+        audioManager.playMenuMusic();
     }
 
     @Override
@@ -67,6 +71,7 @@ public class GameApp extends ApplicationAdapter {
         if (mainMenu      != null) mainMenu.dispose();
         if (sceneRenderer != null) sceneRenderer.dispose();
         if (session       != null) { saveManager.save(session); session.dispose(); }
+        if (audioManager  != null) audioManager.dispose();
     }
 
     private void tickMenu() {
@@ -127,7 +132,11 @@ public class GameApp extends ApplicationAdapter {
         buildCamera();
         session = new GameSession();
         session.applyDifficulty(difficulty); // must be before create()
-        session.create(camera);
+        
+        audioManager.stopMenuMusic();
+        session.create(camera, audioManager);
+        audioManager.playMusic();
+        
         session.getTutorialManager().start();
         buildGameObjects();
         appState = AppState.PLAYING;
@@ -138,7 +147,11 @@ public class GameApp extends ApplicationAdapter {
         buildCamera();
         session = new GameSession();
         session.applyDifficulty(DifficultyLevel.NORMAL);
-        session.create(camera);
+        
+        audioManager.stopMenuMusic();
+        session.create(camera, audioManager);
+        audioManager.playMusic();
+        
         saveManager.load(session);
         buildGameObjects();
         appState = AppState.PLAYING;
@@ -175,5 +188,7 @@ public class GameApp extends ApplicationAdapter {
         mainMenu = new MainMenuOverlay(saveManager.hasSaveFile());
         appState = AppState.MENU;
         Gdx.input.setInputProcessor(null);
+        audioManager.stopMusic();
+        audioManager.playMenuMusic();
     }
 }
