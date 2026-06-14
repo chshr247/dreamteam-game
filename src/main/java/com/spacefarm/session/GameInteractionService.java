@@ -60,6 +60,10 @@ public class GameInteractionService {
             return false;
         }
 
+        if (session.getTutorialManager().isBlockInput()) {
+            return true;
+        }
+
         // TreeBoxUI intercepts all clicks when visible
         if (session.getTreeBoxUI().isVisible()) {
             int result = session.getTreeBoxUI().handleClick(screenX, screenY, Gdx.graphics.getHeight());
@@ -146,6 +150,7 @@ public class GameInteractionService {
         if (session.isGameOver() || session.isVictory()) {
             return false;
         }
+        if (session.getTutorialManager().isBlockInput()) return true;
         return session.getInventoryUI().handleTouchDragged(screenX, screenY);
     }
 
@@ -153,6 +158,7 @@ public class GameInteractionService {
         if (session.isGameOver() || session.isVictory()) {
             return false;
         }
+        if (session.getTutorialManager().isBlockInput()) return true;
         if (button == Buttons.LEFT) {
             int draggedSlot = session.getInventoryUI().getDraggedSlotIndex();
             if (draggedSlot != -1) {
@@ -181,6 +187,7 @@ public class GameInteractionService {
     }
 
     public boolean handleKeyDown(int keycode) {
+        if (session.getTutorialManager().isBlockInput()) return true;
         if (keycode >= Keys.NUM_1 && keycode <= Keys.NUM_8) {
             int slotIndex = keycode - Keys.NUM_1;
             session.getInventory().selectSlot(slotIndex);
@@ -219,6 +226,7 @@ public class GameInteractionService {
 
     public boolean handleScrolled(float amountX, float amountY) {
         if (session.isGameOver()) return false;
+        if (session.getTutorialManager().isBlockInput()) return true;
         if (session.getDroneConsoleOverlay().isVisible()) {
             return session.getDroneConsoleOverlay().handleScrolled(amountY);
         }

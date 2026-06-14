@@ -97,6 +97,7 @@ public class GameApp extends ApplicationAdapter {
 
         camera.update();
         sceneRenderer.render(camera, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        session.getTutorialManager().render(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
         if (session.isVictory()) {
             VictoryOverlay.Action winAction = session.getVictoryOverlay().handleInput();
@@ -127,6 +128,7 @@ public class GameApp extends ApplicationAdapter {
         session = new GameSession();
         session.applyDifficulty(difficulty); // must be before create()
         session.create(camera);
+        session.getTutorialManager().start();
         buildGameObjects();
         appState = AppState.PLAYING;
     }
