@@ -63,7 +63,7 @@
   },
   "oxygen": {
     "currentOxygen": 100.0,
-    "isAtBase": true
+    "isAtBase": false
   },
   "farming": {
     "crops": {}
@@ -107,7 +107,7 @@
     }
   ],
   "wallet": {
-    "balance": 5500.0
+    "balance": 100.0
   },
   "gameOver": false
 }

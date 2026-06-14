@@ -1,6 +1,8 @@
 package com.spacefarm.session;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Buttons;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -62,6 +64,7 @@ public class GameSession {
     private TilePicker tilePicker;
     private TreeBoxUI treeBoxUI;
     private TutorialManager tutorialManager;
+    private SettingsOverlay settingsOverlay;
     private boolean gameOver;
     private boolean victory;
     private Texture baseTileTexture;
@@ -118,7 +121,7 @@ public class GameSession {
                 if (refLayer instanceof TiledMapTileLayer) {
                     TiledMapTileLayer rtl = (TiledMapTileLayer) refLayer;
                     String layerName = rtl.getName();
-                    
+
                     // Check if map already has this layer (except for our baseLayer)
                     boolean exists = false;
                     for (com.badlogic.gdx.maps.MapLayer ml : map.getLayers()) {
@@ -127,7 +130,7 @@ public class GameSession {
                             break;
                         }
                     }
-                    
+
                     if (!exists) {
                         TiledMapTileLayer newLayer = new TiledMapTileLayer(worldWidthTiles, worldHeightTiles,
                                 rtl.getTileWidth(), rtl.getTileHeight());
@@ -183,6 +186,7 @@ public class GameSession {
         treeBoxUI = new TreeBoxUI();
         treeBoxUI.setInventory(inventory);
         tutorialManager = new TutorialManager(this);
+        settingsOverlay = new SettingsOverlay(this.audioManager);
         gameOver = false;
         victory = false;
 
@@ -198,18 +202,35 @@ public class GameSession {
     }
 
     public boolean handleTouchDown(int screenX, int screenY, int button) {
+        if (!gameOver && !victory && settingsOverlay != null
+                && (settingsOverlay.isOpen() || button == Buttons.LEFT)) {
+            if (settingsOverlay.handleTouchDown(screenX, screenY, Gdx.graphics.getHeight())) {
+                return true;
+            }
+        }
         return interactionService.handleTouchDown(screenX, screenY, button);
     }
 
     public boolean handleTouchDragged(int screenX, int screenY) {
+        if (settingsOverlay != null
+                && settingsOverlay.handleTouchDragged(screenX, screenY, Gdx.graphics.getHeight())) {
+            return true;
+        }
         return interactionService.handleTouchDragged(screenX, screenY);
     }
 
     public boolean handleTouchUp(int screenX, int screenY, int button) {
+        if (settingsOverlay != null && settingsOverlay.handleTouchUp()) {
+            return true;
+        }
         return interactionService.handleTouchUp(screenX, screenY, button);
     }
 
     public boolean handleKeyDown(int keycode) {
+        if (keycode == Keys.ESCAPE && !gameOver && !victory && settingsOverlay != null) {
+            settingsOverlay.toggle();
+            return true;
+        }
         return interactionService.handleKeyDown(keycode);
     }
 
@@ -230,9 +251,11 @@ public class GameSession {
         if (treeBoxUI != null) treeBoxUI.dispose();
         if (droneConsoleOverlay != null) droneConsoleOverlay.dispose();
         if (tutorialManager != null) tutorialManager.dispose();
+        if (settingsOverlay != null) settingsOverlay.dispose();
     }
 
     public TutorialManager getTutorialManager() { return tutorialManager; }
+    public SettingsOverlay getSettingsOverlay() { return settingsOverlay; }
 
     public AudioManager getAudioManager() { return audioManager; }
     public Wallet getWallet() { return wallet; }
@@ -264,7 +287,7 @@ public class GameSession {
     public WorldBounds getWorldBounds() {
         int mapW = baseLayer.getWidth();
         int mapH = baseLayer.getHeight();
-        
+
         // Ensure bounds cover at least the outdoor zone
         int minX = Math.min(0, outdoorZone.getBorderX());
         int minY = Math.min(0, outdoorZone.getBorderY());

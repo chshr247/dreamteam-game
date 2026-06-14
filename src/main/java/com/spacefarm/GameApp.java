@@ -12,6 +12,7 @@ import com.spacefarm.input.GameInputRouter;
 import com.spacefarm.render.GameOverOverlay;
 import com.spacefarm.render.GameSceneRenderer;
 import com.spacefarm.render.MainMenuOverlay;
+import com.spacefarm.render.SettingsOverlay;
 import com.spacefarm.render.VictoryOverlay;
 import com.spacefarm.save.SaveManager;
 import com.spacefarm.session.GameSession;
@@ -104,6 +105,18 @@ public class GameApp extends ApplicationAdapter {
         sceneRenderer.render(camera, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         session.getTutorialManager().render(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
+        // Settings panel actions (gear button: save / exit to main menu)
+        SettingsOverlay.Action settingsAction = session.getSettingsOverlay().pollAction();
+        if (settingsAction == SettingsOverlay.Action.SAVE) {
+            saveManager.save(session);
+            autosaveTimer = 0f;
+        } else if (settingsAction == SettingsOverlay.Action.EXIT) {
+            saveManager.save(session);
+            disposeGame();
+            showMainMenu();
+            return;
+        }
+
         if (session.isVictory()) {
             VictoryOverlay.Action winAction = session.getVictoryOverlay().handleInput();
             if (winAction == VictoryOverlay.Action.RESTART) {
@@ -132,11 +145,11 @@ public class GameApp extends ApplicationAdapter {
         buildCamera();
         session = new GameSession();
         session.applyDifficulty(difficulty); // must be before create()
-        
+
         audioManager.stopMenuMusic();
         session.create(camera, audioManager);
         audioManager.playMusic();
-        
+
         session.getTutorialManager().start();
         buildGameObjects();
         appState = AppState.PLAYING;
@@ -147,11 +160,11 @@ public class GameApp extends ApplicationAdapter {
         buildCamera();
         session = new GameSession();
         session.applyDifficulty(DifficultyLevel.NORMAL);
-        
+
         audioManager.stopMenuMusic();
         session.create(camera, audioManager);
         audioManager.playMusic();
-        
+
         saveManager.load(session);
         buildGameObjects();
         appState = AppState.PLAYING;
