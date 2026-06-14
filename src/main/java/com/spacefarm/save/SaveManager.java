@@ -169,7 +169,7 @@ public class SaveManager {
     /**
      * Custom adapter for polymorphic Item serialization/deserialization.
      */
-    private static class ItemAdapter implements JsonSerializer<Item>, JsonDeserializer<Item> {
+    static class ItemAdapter implements JsonSerializer<Item>, JsonDeserializer<Item> {
         @Override
         public JsonElement serialize(Item src, Type typeOfSrc, JsonSerializationContext context) {
             if (src == null) return JsonNull.INSTANCE;
