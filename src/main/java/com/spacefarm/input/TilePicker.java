@@ -25,6 +25,12 @@ public class TilePicker {
         this.maxY = maxY;
     }
 
+    public com.badlogic.gdx.math.Vector3 screenToWorld(int screenX, int screenY) {
+        tmp.set(screenX, screenY, 0f);
+        camera.unproject(tmp);
+        return tmp;
+    }
+
     public TileCoord screenToTile(int screenX, int screenY) {
         tmp.set(screenX, screenY, 0f);
         camera.unproject(tmp);

@@ -7,7 +7,7 @@
         "itemType": "WATERING_CAN"
       },
       {
-        "quantity": 1,
+        "quantity": 3,
         "name": "Насіння",
         "description": "Насіння для посадження (5)",
         "itemType": "SEED"
@@ -17,57 +17,16 @@
         "description": "Інструмент для збору врожаю",
         "itemType": "SICKLE"
       },
-      {
-        "name": "Біокомпост",
-        "description": "Предмет фази дерева 1. Ціна в магазині: $500",
-        "itemType": "BIO_COMPOST"
-      },
-      {
-        "name": "Жива роса",
-        "description": "Предмет фази дерева 2. Ціна в магазині: $1000",
-        "itemType": "LIVING_DEW"
-      },
-      {
-        "name": "Мікоризна мережа",
-        "description": "Предмет фази дерева 3. Ціна в магазині: $2000",
-        "itemType": "MYCORRHIZA_NETWORK"
-      },
-      {
-        "name": "Всесвітня квітка",
-        "description": "Предмет фази дерева 4. Ціна в магазині: $4000",
-        "itemType": "UNIVERSE_FLOWER"
-      },
-      {
-        "name": "Ядро Едему",
-        "description": "Предмет фази дерева 5. Ціна в магазині: $8000",
-        "itemType": "EDEN_CORE"
-      },
-      {
-        "quantity": 20,
-        "name": "Насіння",
-        "description": "Насіння для посадження (20)",
-        "itemType": "SEED"
-      },
-      {
-        "name": "Кристал",
-        "description": "Цінний космічний кристал, здобутий під час пошуку",
-        "itemType": "CRYSTAL"
-      },
-      {
-        "name": "Кристал",
-        "description": "Цінний космічний кристал, здобутий під час пошуку",
-        "itemType": "CRYSTAL"
-      },
-      {
-        "name": "Кристал",
-        "description": "Цінний космічний кристал, здобутий під час пошуку",
-        "itemType": "CRYSTAL"
-      },
-      {
-        "name": "Кристал",
-        "description": "Цінний космічний кристал, здобутий під час пошуку",
-        "itemType": "CRYSTAL"
-      },
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
       null,
       null,
       null,
@@ -83,81 +42,69 @@
     "selectedSlot": 1
   },
   "oxygen": {
-    "currentOxygen": 76.0,
+    "currentOxygen": 60.0,
     "isAtBase": true
   },
   "farming": {
     "crops": {
-      "15,34": {
+      "19,17": {
         "type": "DEFAULT",
-        "growthStage": "YOUNG",
-        "growthTimer": 9.540603,
-        "timeSinceWatered": 17.553755,
-        "waterState": "DYING"
+        "growthStage": "SEED",
+        "growthTimer": 10.027335,
+        "timeSinceWatered": 10.027335,
+        "waterState": "NORMAL",
+        "age": 10.027335
       },
-      "15,33": {
+      "18,17": {
         "type": "DEFAULT",
-        "growthStage": "YOUNG",
-        "growthTimer": 9.173969,
-        "timeSinceWatered": 17.186823,
-        "waterState": "DYING"
-      },
-      "16,34": {
-        "type": "DEFAULT",
-        "growthStage": "YOUNG",
-        "growthTimer": 8.536857,
-        "timeSinceWatered": 16.537575,
-        "waterState": "DYING"
-      },
-      "16,33": {
-        "type": "DEFAULT",
-        "growthStage": "YOUNG",
-        "growthTimer": 8.83946,
-        "timeSinceWatered": 16.853626,
-        "waterState": "DYING"
+        "growthStage": "SEED",
+        "growthTimer": 8.583401,
+        "timeSinceWatered": 8.583401,
+        "waterState": "WELL_WATERED",
+        "age": 8.583401
       }
     }
   },
   "locations": [
     {
-      "isCleared": true,
-      "lastClearedTime": 1781517593604,
-      "isScavenging": false,
-      "scavengingStartTime": 1781517583588
+      "isCleared": false,
+      "lastClearedTime": 0,
+      "isScavenging": true,
+      "scavengingStartTime": 1781531460259
+    },
+    {
+      "isCleared": false,
+      "lastClearedTime": 0,
+      "isScavenging": true,
+      "scavengingStartTime": 1781531456664
+    },
+    {
+      "isCleared": false,
+      "lastClearedTime": 0,
+      "isScavenging": true,
+      "scavengingStartTime": 1781531458503
+    },
+    {
+      "isCleared": false,
+      "lastClearedTime": 0,
+      "isScavenging": true,
+      "scavengingStartTime": 1781531461120
+    },
+    {
+      "isCleared": false,
+      "lastClearedTime": 0,
+      "isScavenging": true,
+      "scavengingStartTime": 1781531459718
     },
     {
       "isCleared": false,
       "lastClearedTime": 0,
       "isScavenging": false,
       "scavengingStartTime": 0
-    },
-    {
-      "isCleared": true,
-      "lastClearedTime": 1781517607088,
-      "isScavenging": false,
-      "scavengingStartTime": 1781517597088
-    },
-    {
-      "isCleared": true,
-      "lastClearedTime": 1781517590704,
-      "isScavenging": false,
-      "scavengingStartTime": 1781517580704
-    },
-    {
-      "isCleared": true,
-      "lastClearedTime": 1781517608504,
-      "isScavenging": false,
-      "scavengingStartTime": 1781517598504
-    },
-    {
-      "isCleared": true,
-      "lastClearedTime": 1781517577854,
-      "isScavenging": false,
-      "scavengingStartTime": 0
     }
   ],
   "wallet": {
-    "balance": 100.0
+    "balance": 15000.0
   },
   "gameOver": false
 }

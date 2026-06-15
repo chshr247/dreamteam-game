@@ -356,6 +356,16 @@ public class BaseZoneRenderer {
         batch.setShader(null);
     }
 
+    public boolean isTreeClicked(float worldX, float worldY) {
+        return worldX >= lastTreeX && worldX <= lastTreeX + lastTreeW &&
+               worldY >= lastTreeY && worldY <= lastTreeY + lastTreeH;
+    }
+
+    public boolean isDroneClicked(float worldX, float worldY) {
+        return worldX >= lastDroneX && worldX <= lastDroneX + lastDroneSize &&
+               worldY >= lastDroneY && worldY <= lastDroneY + lastDroneSize;
+    }
+
     public void dispose() {
         if (greenTileTexture != null) greenTileTexture.dispose();
         if (treeTileTexture != null) treeTileTexture.dispose();

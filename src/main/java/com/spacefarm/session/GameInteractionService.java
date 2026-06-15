@@ -240,6 +240,10 @@ public class GameInteractionService {
     }
 
     private void handleTileClick(int screenX, int screenY) {
+        com.badlogic.gdx.math.Vector3 worldPos = session.getTilePicker().screenToWorld(screenX, screenY);
+        float worldX = worldPos.x;
+        float worldY = worldPos.y;
+
         TileCoord coord = session.getTilePicker().screenToTile(screenX, screenY);
         if (coord == null) return;
         
@@ -247,34 +251,38 @@ public class GameInteractionService {
 
         session.getOxygenManager().updatePositionTile(coord);
 
-        if (session.getBaseZone().isDroneZone(coord)) {
+        // --- Precise Hitbox Checks ---
+        if (session.getBaseZoneRenderer() != null && session.getBaseZoneRenderer().isDroneClicked(worldX, worldY)) {
             session.getDroneConsoleOverlay().setVisible(true);
             return;
         }
+
+        if (session.getBaseZoneRenderer() != null && session.getBaseZoneRenderer().isTreeClicked(worldX, worldY)) {
+            session.getTreeBoxUI().show();
+            return;
+        }
+
+        if (session.getOutdoorZoneRenderer() != null) {
+            ScavengingLocation location = session.getOutdoorZoneRenderer().getLocationAt(worldX, worldY);
+            if (location != null) {
+                if (location.getLocationType() == ScavengingLocation.LocationType.SEED_WHEEL) {
+                    if (!location.isInCooldown()) {
+                        session.getSeedWheelOverlay().setVisible(true);
+                        currentSeedWheelLocation = location;
+                    }
+                } else if (!location.isScavenging() && !location.isInCooldown()) {
+                    location.startScavenging();
+                }
+                return;
+            }
+        }
+        // -----------------------------
 
         if (lastSelected != null) {
             session.getSelectionLayer().setCell(lastSelected.x() - session.getWorldMinX(), lastSelected.y() - session.getWorldMinY(), null);
         }
         session.getSelectionLayer().setCell(coord.x() - session.getWorldMinX(), coord.y() - session.getWorldMinY(), session.createHighlightCell());
         lastSelected = coord;
-
-        if (session.getBaseZone().isTreeArea(coord)) {
-            session.getTreeBoxUI().show();
-            return;
-        }
-
-        ScavengingLocation location = session.getOutdoorZone().getLocationAt(coord);
-        if (location != null) {
-            if (location.getLocationType() == ScavengingLocation.LocationType.SEED_WHEEL) {
-                if (!location.isInCooldown()) {
-                    session.getSeedWheelOverlay().setVisible(true);
-                    currentSeedWheelLocation = location;
-                }
-            } else if (!location.isScavenging() && !location.isInCooldown()) {
-                location.startScavenging();
-            }
-            return;
-        }
 
         if (session.getInventory().isWateringCanSelected()) {
             if (session.getFarmingSystem().hasCrop(coord)) {

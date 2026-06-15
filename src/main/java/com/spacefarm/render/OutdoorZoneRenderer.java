@@ -34,6 +34,18 @@ public class OutdoorZoneRenderer {
     private com.spacefarm.session.GameSession session;
     private TiledMap referenceMap;
 
+    // Glow effect and Hover state
+    private com.badlogic.gdx.graphics.glutils.ShaderProgram whiteShader;
+    private float[] locationHoverAlphas;
+    private static final float FADE_SPEED = 5.0f;
+    private final com.badlogic.gdx.math.Vector3 tmpVec = new com.badlogic.gdx.math.Vector3();
+
+    // Sprite bounds tracking for hitboxes
+    private float[] lastDrawX;
+    private float[] lastDrawY;
+    private float[] lastDrawW;
+    private float[] lastDrawH;
+
     public OutdoorZoneRenderer(OutdoorZone outdoorZone, TiledMapTileLayer zoneLayer, int tileSize, int worldMinX, int worldMinY, com.spacefarm.session.GameSession session) {
         this(outdoorZone, zoneLayer, null, tileSize, worldMinX, worldMinY, session);
     }
@@ -53,13 +65,51 @@ public class OutdoorZoneRenderer {
         this.session = session;
         this.batch = new SpriteBatch();
         this.whitePixel = createSolidTexture(1, 1, 255, 255, 255, 255);
+        
+        int locationCount = outdoorZone.getLocations().size();
+        locationHoverAlphas = new float[locationCount];
+        lastDrawX = new float[locationCount];
+        lastDrawY = new float[locationCount];
+        lastDrawW = new float[locationCount];
+        lastDrawH = new float[locationCount];
+
         createTextures(tileSize);
+        createWhiteShader();
+
         if(map != null) {
             borderLayer = new TiledMapTileLayer(zoneLayer.getWidth(), zoneLayer.getHeight(),
                     zoneLayer.getTileWidth(), zoneLayer.getTileHeight());
             borderLayer.setOffsetX(worldMinX * zoneLayer.getTileWidth());
             borderLayer.setOffsetY(worldMinY * zoneLayer.getTileHeight());
             map.getLayers().add(borderLayer);
+        }
+    }
+
+    private void createWhiteShader() {
+        String vertexShader = "attribute vec4 a_position;\n" +
+                              "attribute vec4 a_color;\n" +
+                              "attribute vec2 a_texCoord0;\n" +
+                              "uniform mat4 u_projTrans;\n" +
+                              "varying vec4 v_color;\n" +
+                              "varying vec2 v_texCoords;\n" +
+                              "void main() {\n" +
+                              "   v_color = a_color;\n" +
+                              "   v_texCoords = a_texCoord0;\n" +
+                              "   gl_Position = u_projTrans * a_position;\n" +
+                              "}\n";
+        String fragmentShader = "#ifdef GL_ES\n" +
+                                "precision mediump float;\n" +
+                                "#endif\n" +
+                                "varying vec4 v_color;\n" +
+                                "varying vec2 v_texCoords;\n" +
+                                "uniform sampler2D u_texture;\n" +
+                                "void main() {\n" +
+                                "  vec4 color = texture2D(u_texture, v_texCoords);\n" +
+                                "  gl_FragColor = vec4(1.0, 1.0, 1.0, color.a * v_color.a);\n" +
+                                "}\n";
+        whiteShader = new com.badlogic.gdx.graphics.glutils.ShaderProgram(vertexShader, fragmentShader);
+        if (!whiteShader.isCompiled()) {
+            Gdx.app.error("OutdoorZoneRenderer", "Error compiling white shader: " + whiteShader.getLog());
         }
     }
 
@@ -313,10 +363,18 @@ public class OutdoorZoneRenderer {
     }
 
     public void render(OrthographicCamera camera, long scavengeDuration) {
+        // --- Precise Hover Detection ---
+        tmpVec.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+        camera.unproject(tmpVec);
+        float mouseX = tmpVec.x;
+        float mouseY = tmpVec.y;
+        float dt = Gdx.graphics.getDeltaTime();
+
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
         int tileSize = zoneLayer.getTileWidth();
         int locationCount = Math.min(outdoorZone.getLocations().size(), droneTextures.length);
+        
         for(int i = 0; i < locationCount; i++) {
             ScavengingLocation location = outdoorZone.getLocations().get(i);
             float locStartX = location.getTopLeft().x() * tileSize;
@@ -324,26 +382,78 @@ public class OutdoorZoneRenderer {
             float locWidth = location.getWidth() * tileSize;
             float locHeight = location.getHeight() * tileSize;
 
+            float drawX, drawY, drawW, drawH;
+            Texture currentTex;
+
             if (location.getLocationType() == ScavengingLocation.LocationType.SEED_WHEEL) {
-                batch.setColor(1, 1, 1, 1f);
-                float targetSize = tileSize * 6f;
-                float drawX = locStartX + (locWidth - targetSize) / 2f;
-                float drawY = locStartY + (locHeight - targetSize) / 2f;
-                batch.draw(wheelTexture, drawX, drawY, targetSize, targetSize);
+                drawW = tileSize * 6f;
+                drawH = tileSize * 6f;
+                drawX = locStartX + (locWidth - drawW) / 2f;
+                drawY = locStartY + (locHeight - drawH) / 2f;
+                currentTex = wheelTexture;
             } else {
-                batch.setColor(1, 1, 1, 1.0f);
                 float crystalScale = 0.5f;
-                float drawW = locWidth * crystalScale;
-                float drawH = locHeight * crystalScale;
-                float drawX = locStartX + (locWidth - drawW) / 2f;
-                float drawY = locStartY + (locHeight - drawH) / 2f;
-                batch.draw(droneTextures[i], drawX, drawY, drawW, drawH);
+                drawW = locWidth * crystalScale;
+                drawH = locHeight * crystalScale;
+                drawX = locStartX + (locWidth - drawW) / 2f;
+                drawY = locStartY + (locHeight - drawH) / 2f;
+                currentTex = droneTextures[i];
             }
+
+            // Store bounds for click detection
+            lastDrawX[i] = drawX;
+            lastDrawY[i] = drawY;
+            lastDrawW[i] = drawW;
+            lastDrawH[i] = drawH;
+
+            // Hover check
+            if (mouseX >= drawX && mouseX <= drawX + drawW &&
+                mouseY >= drawY && mouseY <= drawY + drawH) {
+                locationHoverAlphas[i] = Math.min(1.0f, locationHoverAlphas[i] + dt * FADE_SPEED);
+            } else {
+                locationHoverAlphas[i] = Math.max(0.0f, locationHoverAlphas[i] - dt * FADE_SPEED);
+            }
+
+            // Render Glow
+            if (locationHoverAlphas[i] > 0) {
+                drawOutline(currentTex, drawX, drawY, drawW, drawH, locationHoverAlphas[i]);
+            }
+
+            // Render Sprite
+            batch.setColor(1, 1, 1, 1.0f);
+            batch.draw(currentTex, drawX, drawY, drawW, drawH);
 
             if(location.isScavenging()) renderProgressBar(location, locStartX, locStartY, locWidth, locHeight, scavengeDuration);
             if(location.isInCooldown()) renderCooldownIndicator(location, locStartX, locStartY, locWidth, locHeight);
         }
         batch.end();
+    }
+
+    private void drawOutline(Texture tex, float x, float y, float w, float h, float alpha) {
+        batch.setShader(whiteShader);
+        batch.setColor(1, 1, 1, alpha);
+        float offset = 1.5f;
+        // 8-way offset for a thicker outline
+        batch.draw(tex, x - offset, y, w, h);
+        batch.draw(tex, x + offset, y, w, h);
+        batch.draw(tex, x, y - offset, w, h);
+        batch.draw(tex, x, y + offset, w, h);
+        batch.draw(tex, x - offset, y - offset, w, h);
+        batch.draw(tex, x + offset, y - offset, w, h);
+        batch.draw(tex, x - offset, y + offset, w, h);
+        batch.draw(tex, x + offset, y + offset, w, h);
+        batch.setShader(null);
+    }
+
+    public ScavengingLocation getLocationAt(float worldX, float worldY) {
+        int locationCount = outdoorZone.getLocations().size();
+        for (int i = 0; i < locationCount; i++) {
+            if (worldX >= lastDrawX[i] && worldX <= lastDrawX[i] + lastDrawW[i] &&
+                worldY >= lastDrawY[i] && worldY <= lastDrawY[i] + lastDrawH[i]) {
+                return outdoorZone.getLocations().get(i);
+            }
+        }
+        return null;
     }
 
     private void renderProgressBar(ScavengingLocation location, float x, float y, float width, float height, long scavengeDuration) {
@@ -385,6 +495,7 @@ public class OutdoorZoneRenderer {
         if(droneTextures != null) for(Texture t : droneTextures) if(t != null) t.dispose();
         if(wheelTexture != null) wheelTexture.dispose();
         if(greenTileTexture != null) greenTileTexture.dispose();
+        if(whiteShader != null) whiteShader.dispose();
         if(batch != null) batch.dispose();
     }
 }
