@@ -165,12 +165,7 @@ public class GameSession {
         inventory.addItem(1, new Seed(5));
         inventory.addItem(2, Sickle.getInstance());
 
-        // Debug items
-        inventory.addItem(new BioCompost());
-        inventory.addItem(new LivingDew());
-        inventory.addItem(new MycorrhizaNetwork());
-        inventory.addItem(new UniverseFlower());
-        inventory.addItem(new EdenCore());
+
 
         oxygenManager = new OxygenManager();
         wallet = new Wallet(difficulty.startingMoney);
