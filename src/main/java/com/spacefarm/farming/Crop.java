@@ -4,15 +4,13 @@ import com.spacefarm.farming.FarmingConstants.GrowthStage;
 import com.spacefarm.farming.FarmingConstants.WaterState;
 import com.spacefarm.farming.FarmingConstants.CropType;
 
-/**
- * Represents a single crop on a tile.
- */
 public class Crop {
     private final CropType type; // Зберігаємо тип рослини
     private GrowthStage growthStage;
     private float growthTimer;
     private float timeSinceWatered;
     private WaterState waterState;
+    private float age;
 
     public Crop(CropType type) {
         this.type = type;
@@ -24,6 +22,7 @@ public class Crop {
 
     // Оновлює стан росту та поливу рослини за проміжок часу
     public void update(float deltaTime) {
+        age += deltaTime;
         updateGrowthStage(deltaTime);
         updateWaterState(deltaTime);
     }
@@ -129,6 +128,10 @@ public class Crop {
     }
 
     public boolean isDead() {
-        return waterState == WaterState.DYING && timeSinceWatered > FarmingConstants.DRYING_DURATION * 1.5f;
+        // рослина засихає, якщо довго не поливали
+        boolean diedFromThirst = waterState == WaterState.DYING && timeSinceWatered > FarmingConstants.DRYING_DURATION * 1.5f;
+        // якщо просто прожила надто довго, навіть будучи поливаною
+        boolean diedFromOldAge = age >= FarmingConstants.MAX_PLANT_LIFETIME;
+        return diedFromThirst || diedFromOldAge;
     }
 }

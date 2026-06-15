@@ -143,8 +143,8 @@ public class GameInteractionService {
         // ──────────────────────────────────────────────────────────────────────
 
         if (button == Buttons.RIGHT) {
-            showContextMenu(screenX, screenY);
-            return true;
+         //   showContextMenu(screenX, screenY);
+         //s   return true;
         }
 
         session.getContextMenu().hide();

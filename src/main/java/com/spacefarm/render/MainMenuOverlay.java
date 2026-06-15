@@ -212,11 +212,11 @@ public class MainMenuOverlay {
         drawButton(btnEasy,   "ЛЕГКИЙ",      0.06f,0.22f,0.08f, 0.25f,0.85f,0.30f, btnFont);
 
         float descPad = panelH * 0.005f;
-        drawCentredText(descFont, "Кисень -6%   •   2 грядки   •   100₿",
+        drawCentredText(descFont, "Кисень -15%   •   2 грядки   •   100₿",
                 cx, btnHard.y   - descPad, 0.70f, 0.16f, 0.16f);
-        drawCentredText(descFont, "Кисень -4%   •   5 грядок   •   1000₿",
+        drawCentredText(descFont, "Кисень -10%   •   5 грядок   •   1000₿",
                 cx, btnNormal.y - descPad, 0.14f, 0.60f, 0.72f);
-        drawCentredText(descFont, "Кисень -2%   •   10 грядок  •   1500₿",
+        drawCentredText(descFont, "Кисень -5%   •   10 грядок  •   1500₿",
                 cx, btnEasy.y   - descPad, 0.20f, 0.65f, 0.22f);
 
         // Back button — bottom-left corner of panel
