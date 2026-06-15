@@ -9,7 +9,7 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
-import com.spacefarm.inventory.Crystal;
+import com.spacefarm.inventory.*;
 import com.spacefarm.session.GameSession;
 import com.spacefarm.world.BaseZoneConstants;
 import com.spacefarm.world.TileCoord;
@@ -542,6 +542,21 @@ public class DroneConsoleOverlay {
 
     private void buy(Upg u) {
         if (u.maxed()||session.getWallet().getBalance()<u.cost) return;
+
+        Item itemToGive = null;
+        if ("tree_growth".equals(u.id)) itemToGive = new BioCompost();
+        else if ("tree_oxygen".equals(u.id)) itemToGive = new LivingDew();
+        else if ("tree_water".equals(u.id)) itemToGive = new MycorrhizaNetwork();
+        else if ("tree_rare".equals(u.id)) itemToGive = new UniverseFlower();
+        else if ("tree_final".equals(u.id)) itemToGive = new EdenCore();
+
+        if (itemToGive != null) {
+            boolean added = session.getInventory().addItem(itemToGive);
+            if (!added) {
+                return; // Inventory is full, purchase failed
+            }
+        }
+
         session.getWallet().spend(u.cost);
         u.lv++;
         session.getAudioManager().playBoughtSound();
