@@ -7,7 +7,7 @@
         "itemType": "WATERING_CAN"
       },
       {
-        "quantity": 5,
+        "quantity": 1,
         "name": "Насіння",
         "description": "Насіння для посадження (5)",
         "itemType": "SEED"
@@ -18,35 +18,56 @@
         "itemType": "SICKLE"
       },
       {
-        "name": "Bio-Compost",
-        "description": "Tree phase 1 item. Shop price: $500",
+        "name": "Біокомпост",
+        "description": "Предмет фази дерева 1. Ціна в магазині: $500",
         "itemType": "BIO_COMPOST"
       },
       {
-        "name": "Living Dew",
-        "description": "Tree phase 2 item. Shop price: $1000",
+        "name": "Жива роса",
+        "description": "Предмет фази дерева 2. Ціна в магазині: $1000",
         "itemType": "LIVING_DEW"
       },
       {
-        "name": "Mycorrhiza Net",
-        "description": "Tree phase 3 item. Shop price: $2000",
+        "name": "Мікоризна мережа",
+        "description": "Предмет фази дерева 3. Ціна в магазині: $2000",
         "itemType": "MYCORRHIZA_NETWORK"
       },
       {
-        "name": "Universe Flower",
-        "description": "Tree phase 4 item. Shop price: $4000",
+        "name": "Всесвітня квітка",
+        "description": "Предмет фази дерева 4. Ціна в магазині: $4000",
         "itemType": "UNIVERSE_FLOWER"
       },
       {
-        "name": "Eden Core",
-        "description": "Tree phase 5 item. Shop price: $8000",
+        "name": "Ядро Едему",
+        "description": "Предмет фази дерева 5. Ціна в магазині: $8000",
         "itemType": "EDEN_CORE"
       },
-      null,
-      null,
-      null,
-      null,
-      null,
+      {
+        "quantity": 20,
+        "name": "Насіння",
+        "description": "Насіння для посадження (20)",
+        "itemType": "SEED"
+      },
+      {
+        "name": "Кристал",
+        "description": "Цінний космічний кристал, здобутий під час пошуку",
+        "itemType": "CRYSTAL"
+      },
+      {
+        "name": "Кристал",
+        "description": "Цінний космічний кристал, здобутий під час пошуку",
+        "itemType": "CRYSTAL"
+      },
+      {
+        "name": "Кристал",
+        "description": "Цінний космічний кристал, здобутий під час пошуку",
+        "itemType": "CRYSTAL"
+      },
+      {
+        "name": "Кристал",
+        "description": "Цінний космічний кристал, здобутий під час пошуку",
+        "itemType": "CRYSTAL"
+      },
       null,
       null,
       null,
@@ -59,21 +80,50 @@
       null,
       null
     ],
-    "selectedSlot": 0
+    "selectedSlot": 1
   },
   "oxygen": {
-    "currentOxygen": 100.0,
-    "isAtBase": false
+    "currentOxygen": 76.0,
+    "isAtBase": true
   },
   "farming": {
-    "crops": {}
+    "crops": {
+      "15,34": {
+        "type": "DEFAULT",
+        "growthStage": "YOUNG",
+        "growthTimer": 9.540603,
+        "timeSinceWatered": 17.553755,
+        "waterState": "DYING"
+      },
+      "15,33": {
+        "type": "DEFAULT",
+        "growthStage": "YOUNG",
+        "growthTimer": 9.173969,
+        "timeSinceWatered": 17.186823,
+        "waterState": "DYING"
+      },
+      "16,34": {
+        "type": "DEFAULT",
+        "growthStage": "YOUNG",
+        "growthTimer": 8.536857,
+        "timeSinceWatered": 16.537575,
+        "waterState": "DYING"
+      },
+      "16,33": {
+        "type": "DEFAULT",
+        "growthStage": "YOUNG",
+        "growthTimer": 8.83946,
+        "timeSinceWatered": 16.853626,
+        "waterState": "DYING"
+      }
+    }
   },
   "locations": [
     {
-      "isCleared": false,
-      "lastClearedTime": 0,
+      "isCleared": true,
+      "lastClearedTime": 1781517593604,
       "isScavenging": false,
-      "scavengingStartTime": 0
+      "scavengingStartTime": 1781517583588
     },
     {
       "isCleared": false,
@@ -82,26 +132,26 @@
       "scavengingStartTime": 0
     },
     {
-      "isCleared": false,
-      "lastClearedTime": 0,
+      "isCleared": true,
+      "lastClearedTime": 1781517607088,
       "isScavenging": false,
-      "scavengingStartTime": 0
+      "scavengingStartTime": 1781517597088
     },
     {
-      "isCleared": false,
-      "lastClearedTime": 0,
+      "isCleared": true,
+      "lastClearedTime": 1781517590704,
       "isScavenging": false,
-      "scavengingStartTime": 0
+      "scavengingStartTime": 1781517580704
     },
     {
-      "isCleared": false,
-      "lastClearedTime": 0,
+      "isCleared": true,
+      "lastClearedTime": 1781517608504,
       "isScavenging": false,
-      "scavengingStartTime": 0
+      "scavengingStartTime": 1781517598504
     },
     {
-      "isCleared": false,
-      "lastClearedTime": 0,
+      "isCleared": true,
+      "lastClearedTime": 1781517577854,
       "isScavenging": false,
       "scavengingStartTime": 0
     }

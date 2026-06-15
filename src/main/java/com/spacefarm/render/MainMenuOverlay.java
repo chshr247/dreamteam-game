@@ -106,8 +106,12 @@ public class MainMenuOverlay {
         float titleY = py + panelH - panelH * 0.08f;
         batch.begin();
         titleFont.setColor(0.20f, 0.88f, 1.00f, 1f);
-        layout.setText(titleFont, "SPACE FARM");
-        titleFont.draw(batch, "SPACE FARM", cx - layout.width * 0.5f, titleY);
+        layout.setText(titleFont, "КОСМІЧНА ФЕРМА");
+        float titleScale = Math.min(1f, (panelW * 0.85f) / layout.width);
+        titleFont.getData().setScale(titleScale, 1f);
+        layout.setText(titleFont, "КОСМІЧНА ФЕРМА");
+        titleFont.draw(batch, "КОСМІЧНА ФЕРМА", cx - layout.width * 0.5f, titleY);
+        titleFont.getData().setScale(1f, 1f);
 
         // Subtitle
         float subY = py + panelH - panelH * 0.20f;
@@ -147,7 +151,7 @@ public class MainMenuOverlay {
 
         // Footer — 3% from bottom
         float footerY = py + panelH * 0.04f;
-        drawCentredText(hintFont, "© Space Farm  —  виживання починається тут",
+        drawCentredText(hintFont, "© Космічна ферма  —  виживання починається тут",
                 cx, footerY, 0.22f, 0.40f, 0.48f);
     }
 
