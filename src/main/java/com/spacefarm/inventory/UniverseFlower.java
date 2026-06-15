@@ -2,7 +2,7 @@ package com.spacefarm.inventory;
 
 public class UniverseFlower extends Item {
     public UniverseFlower() {
-        super("Universe Flower", "Tree phase 4 item. Shop price: $4000");
+        super("Квітка Всесвіту", "Артефакт для фази дерева №4");
     }
     @Override
     public ItemType getType() { return ItemType.UNIVERSE_FLOWER; }
