@@ -93,11 +93,11 @@ public class DroneConsoleOverlay {
         crystalIcon = new Texture(Gdx.files.internal("sprite/inventory-icons/crystal.png"));
         camera    = new OrthographicCamera();
 
-        tree.add(new Upg("tree_growth","Розширення коріння","Швидший ріст рослин",200,1));
-        tree.add(new Upg("tree_oxygen","Щільність листя","Краща генерація кисню",350,1));
-        tree.add(new Upg("tree_water","Ядро зволоження","Повільніше випаровування",500,1));
-        tree.add(new Upg("tree_rare","Рідкісний цвіт","Шанс рідкісного насіння +10%",750,1));
-        tree.add(new Upg("tree_final","Дерево Життя","Максимальний кисень +50%",1500,1));
+        tree.add(new Upg("tree_growth","Біо-компост","Артефакт для фази №1 Магічного дерева",500,1));
+        tree.add(new Upg("tree_oxygen","Жива Роса","Артефакт для фази №2 Магічного дерева",1000,1));
+        tree.add(new Upg("tree_water","Мережа Мікоризи","Артефакт для фази №3 Магічного дерева",1500,1));
+        tree.add(new Upg("tree_rare","Квітка Всесвіту","Артефакт для фази №4 Магічного дерева",2000,1));
+        tree.add(new Upg("tree_final","Ядро Едему","Артефакт для фази №5 Магічного дерева",2500,1));
         base.add(new Upg("base_inv","Мод рюкзака","Більший інвентар",800,2));
         base.add(new Upg("base_speed","Турбо-двигуни","Швидша доставка дрона",400,3));
         base.add(new Upg("base_scavenge","Дрон-сканер","Швидше дослідження руїн",600,3));
