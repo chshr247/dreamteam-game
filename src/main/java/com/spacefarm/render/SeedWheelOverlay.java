@@ -115,7 +115,7 @@ public class SeedWheelOverlay {
     }
 
     public void startSpin() {
-        if (isSpinning || showResult) return;
+        if (isSpinning || showResult || resultType != null) return;
         isSpinning    = true;
         spinTimeLeft  = SeedWheelConstants.SPIN_DURATION_SECONDS;
         totalRotation = 0f;
@@ -161,7 +161,8 @@ public class SeedWheelOverlay {
 
     /** Returns true if the "КРУТИТИ" button was hit. */
     public boolean isButtonHit(float screenX, float screenY) {
-        return !isSpinning && !showResult && spinBtnRect.contains(screenX, screenY);
+        return !isSpinning && !showResult && resultType == null && resultDelay <= 0f
+                && spinBtnRect.contains(screenX, screenY);
     }
     /**
      * Returns true if the "X" close button on the wheel panel was hit.
@@ -225,7 +226,7 @@ public class SeedWheelOverlay {
         float btnH = panelH * 0.09f;
         spinBtnRect.set(cx - btnW * 0.5f, py + panelH * 0.065f, btnW, btnH);
 
-        if (isSpinning) {
+        if (isSpinning || resultType != null) {
             drawButton(spinBtnRect, "КРУТИТЬСЯ...",
                     0.05f, 0.06f, 0.07f, 0.35f, 0.35f, 0.35f);
         } else {
