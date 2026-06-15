@@ -62,11 +62,11 @@ public class GameOverOverlay {
 
         batch.begin();
         titleFont.setColor(1f, 0.18f, 0.18f, 1f);
-        layout.setText(titleFont, "GAME OVER");
+        layout.setText(titleFont, "КІНЕЦЬ ГРИ");
         float scaleX = Math.min(1f, (panelW * 0.82f) / layout.width);
         titleFont.getData().setScale(scaleX, 1f);
-        layout.setText(titleFont, "GAME OVER");
-        titleFont.draw(batch, "GAME OVER", cx - layout.width * 0.5f, py + panelH - panelH * 0.08f);
+        layout.setText(titleFont, "КІНЕЦЬ ГРИ");
+        titleFont.draw(batch, "КІНЕЦЬ ГРИ", cx - layout.width * 0.5f, py + panelH - panelH * 0.08f);
         titleFont.getData().setScale(1f, 1f);
         batch.end();
 

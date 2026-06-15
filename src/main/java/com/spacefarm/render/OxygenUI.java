@@ -139,7 +139,7 @@ public class OxygenUI {
             batch.begin();
             font.getData().setScale(1.6f);
             font.setColor(1f, 0.3f, 0.3f, 1f);
-            GlyphLayout wl = new GlyphLayout(font, "LOW OXYGEN");
+            GlyphLayout wl = new GlyphLayout(font, "МАЛО КИСНЮ");
             font.draw(batch, wl,
                     boxX + (boxW - wl.width) / 2f,
                     boxY + (boxH + wl.height) / 2f);
