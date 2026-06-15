@@ -124,7 +124,12 @@ public class GameInteractionService {
                 if (session.getSeedWheelOverlay().handleTouchDown(screenX, adjustedY)) {
                     return true;
                 }
-
+                // 1.5 "X" close button on the wheel panel — закриває без спіна   ← НОВЕ
+                if (session.getSeedWheelOverlay().isCloseHit(screenX, adjustedY)) {
+                    session.getSeedWheelOverlay().setVisible(false);
+                    currentSeedWheelLocation = null;
+                    return true;
+                }
                 // 2. Spin button — only when modal is not shown
                 if (session.getSeedWheelOverlay().isButtonHit(screenX, adjustedY)) {
                     session.getSeedWheelOverlay().startSpin();

@@ -2,7 +2,7 @@ package com.spacefarm.inventory;
 
 public class MycorrhizaNetwork extends Item {
     public MycorrhizaNetwork() {
-        super("Мікоризна мережа", "Предмет фази дерева 3. Ціна в магазині: $2000");
+        super("Мережа Мікоризи", "Артефакт для фази дерева №3");
     }
     @Override
     public ItemType getType() { return ItemType.MYCORRHIZA_NETWORK; }

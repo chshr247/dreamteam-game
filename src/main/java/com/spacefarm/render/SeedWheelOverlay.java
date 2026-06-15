@@ -62,6 +62,7 @@ public class SeedWheelOverlay {
     private final Rectangle spinBtnRect  = new Rectangle();
     private final Rectangle claimBtnRect = new Rectangle();
     private final Rectangle closeBtnRect = new Rectangle();
+    private final Rectangle closeWheelBtnRect = new Rectangle();
 
     // ── Wheel geometry (set during render) ──────────────────────────────────
     private float wx, wy, wr;
@@ -162,6 +163,14 @@ public class SeedWheelOverlay {
     public boolean isButtonHit(float screenX, float screenY) {
         return !isSpinning && !showResult && spinBtnRect.contains(screenX, screenY);
     }
+    /**
+     * Returns true if the "X" close button on the wheel panel was hit.
+     * so the player can close the wheel without spinning it.
+     */
+    public boolean isCloseHit(float screenX, float screenY) {
+        return isVisible && !isSpinning && !showResult
+                && closeWheelBtnRect.contains(screenX, screenY);
+    }
 
     // ════════════════════════════════════════════════════════════════════════
     // Render
@@ -193,6 +202,7 @@ public class SeedWheelOverlay {
         float py = cy - panelH * 0.5f;
 
         drawPanel(px, py, panelW, panelH, 0.02f, 0.05f, 0.11f, AC_R, AC_G, AC_B);
+        drawCloseWheelButton(px, py, panelW, panelH);
 
         wr = Math.min(panelW, panelH) * 0.30f;
         wx = cx;
@@ -224,6 +234,30 @@ public class SeedWheelOverlay {
         }
 
         drawLegend(cx, py + panelH * 0.185f);
+    }
+    private void drawCloseWheelButton(float px, float py, float panelW, float panelH) {
+        float size   = Math.min(panelW, panelH) * 0.075f;
+        float margin = size * 0.45f;
+
+        closeWheelBtnRect.set(px + panelW - size - margin, py + panelH - size - margin, size, size);
+
+        sr.begin(ShapeRenderer.ShapeType.Filled);
+        sr.setColor(0.07f, 0.10f, 0.16f, 0.95f);
+        sr.rect(closeWheelBtnRect.x, closeWheelBtnRect.y, closeWheelBtnRect.width, closeWheelBtnRect.height);
+        sr.end();
+
+        sr.begin(ShapeRenderer.ShapeType.Line);
+        sr.setColor(AC_R, AC_G, AC_B, 0.85f);
+        sr.rect(closeWheelBtnRect.x, closeWheelBtnRect.y, closeWheelBtnRect.width, closeWheelBtnRect.height);
+
+        float pad = size * 0.28f;
+        float x1 = closeWheelBtnRect.x + pad;
+        float y1 = closeWheelBtnRect.y + pad;
+        float x2 = closeWheelBtnRect.x + closeWheelBtnRect.width - pad;
+        float y2 = closeWheelBtnRect.y + closeWheelBtnRect.height - pad;
+        sr.line(x1, y1, x2, y2);
+        sr.line(x1, y2, x2, y1);
+        sr.end();
     }
 
     private void drawWheelBackground() {
