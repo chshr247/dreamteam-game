@@ -13,10 +13,10 @@ public class OutdoorConstants {
     public static final int BORDER_COLOR = 0x4a4a4a;                 // Dark grey color
 
     // Scavenging requirements and costs
-    public static final long SCAVENGING_DURATION_MILLIS = 10000;     // 10 seconds for scavenging
-    public static final long SCAVENGING_COOLDOWN_MILLIS = 10000;     // 10 seconds cooldown before re-scavenge
+    public static final long SCAVENGING_DURATION_MILLIS = 60000;     // 60 seconds for scavenging
+    public static final long SCAVENGING_COOLDOWN_MILLIS = 30000;     // 30 seconds cooldown before re-scavenge
     public static final float OXYGEN_DECREASE_INTERVAL = 10f;        // Decrease oxygen every 10 seconds
-    public static float OXYGEN_DECREASE_AMOUNT = 4f;           // 4% per interval
+    public static float OXYGEN_DECREASE_AMOUNT = 10f;           // 10% per interval
 
     // Rewards
     public static final int CRYSTALS_PER_LOCATION = 1;               // Crystals reward per location clear
