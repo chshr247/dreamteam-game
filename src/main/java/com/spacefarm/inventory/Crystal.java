@@ -11,4 +11,3 @@ public class Crystal extends Item {
         return ItemType.CRYSTAL;
     }
 }
-
